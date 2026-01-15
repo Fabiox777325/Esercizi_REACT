@@ -1,12 +1,10 @@
-import { JSX_1 } from "./cartella_es/1°ES/JSX_1";
-import { I_Componenti_1 } from "./cartella_es/2°ES/I_Componenti_1";
-import { Oggetti_Scena } from "./cartella_es/3°ES/Oggetti_Scena";
+import { Rendering_Condizionale_1 } from "./cartella_esercizi/Rendering_Condizionale_1/Rendering_Condizionale_1";
 
 export function App() {
   return (
     <div>
       <h1>Inserire nome componente Es. per la visualizzazione dell'Esercizio</h1>
-      <Oggetti_Scena />
+      <Rendering_Condizionale_1 />
     </div>
   );
 }
