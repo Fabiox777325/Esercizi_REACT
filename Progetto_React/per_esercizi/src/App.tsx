@@ -1,4 +1,4 @@
-import { Counter } from "./cartella_esercizi/Stato_Uso_1/Stato_Uso_1";
+import { Counter } from "./cartella_esercizi/useEffect_1/UseEffect_1";
 
 export function App() {
   return (

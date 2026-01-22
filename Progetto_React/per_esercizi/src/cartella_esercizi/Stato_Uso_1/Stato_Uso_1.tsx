@@ -30,10 +30,10 @@ export function Counter({ valoreIniziale, incremento, decremento }: CounterProps
     <div>
       <CounterDisplay count={counter} />
       <button title="per incremento" onClick={setterIncrement}>
-        Incrementa di 1
+        {`Incrementa di ${incremento}`}
       </button>
       <button title="per decremento" onClick={setterDecrement}>
-        Decrementa di 2
+        {`Decrementa di ${decremento}`}
       </button>
       <button type="reset" onClick={setterReset}>
         Reset
