@@ -9,73 +9,93 @@
 import { useState, type BaseSyntheticEvent } from "react";
 
 export function InteractiveWelcome() {
+  const [name, setName] = useState("");
+
+  function welcomeName(event: React.ChangeEvent<HTMLInputElement>) {
+    setName(event.target.value);
+  }
+
+  function handleLoginSubmit(loginData: any) {
+    console.log("Dati inviati:", loginData);
+  }
+
   return (
     <>
-      <Welcome />
-      <Login />
-    </>
-  );
-}
-
-function Welcome() {
-  const [name, setName] = useState("");
-  function welcomeName(event: BaseSyntheticEvent) {
-    const name = event.target;
-    setName(name.value);
-  }
-  return (
-    <div>
-      <h1>{`Benvenuto/a gentile ${name}!`}</h1>;
       <label htmlFor="name">
         Inserisci il tuo Nome:
         <input type="text" name="name" value={name} onChange={welcomeName} />
       </label>
-    </div>
+      <Welcome name={name} />
+
+      <Login onLogin={handleLoginSubmit} />
+    </>
   );
 }
 
-function Login() {
+function Welcome({ name }: { name: string }) {
+  return <h1>{`Benvenuto/a gentile ${name === "" ? "ospite" : name}`}</h1>;
+}
+
+interface LoginProps {
+  onLogin: (data: { username: string; password: string; remember: boolean }) => void;
+}
+
+function Login({ onLogin }: LoginProps) {
   const [data, setData] = useState({ username: "", password: "", remember: false });
 
-  function onLogin(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = event.target;
-    const valoreDaSalvare = type === "checkbox" ? checked : value;
-    setData((data) => {
-      return { ...data, [name]: value, [name]: valoreDaSalvare };
+    setData((prev) => {
+      return { ...prev, [name]: type === "checkbox" ? checked : value };
     });
   }
+
+  function handleLogin(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    onLogin(data);
+  }
+
   function reset() {
     setData({ username: "", password: "", remember: false });
   }
-  function handleLogin(data: BaseSyntheticEvent) {}
 
   return (
     <>
       <form>
-        <div>
-          <label htmlFor="username">
-            Nome:
-            <input name="username" value={data.username} type="text" onChange={onLogin} />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="password">
-            Password:
-            <input name="password" value={data.password} type="password" onChange={onLogin} />
-          </label>
-        </div>
-        <input
-          type="checkbox"
-          name="remember"
-          id="checkbox"
-          title="checkbox"
-          checked={data.remember}
-          onChange={onLogin}
-        />
-        Remember
+        <label htmlFor="username">
+          Nome:
+          <input
+            name="username"
+            id="username"
+            value={data.username}
+            type="text"
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="password">
+          Password:
+          <input
+            name="password"
+            id="password"
+            value={data.password}
+            type="password"
+            onChange={handleChange}
+          />
+        </label>
+        <label htmlFor="remember">
+          <input
+            type="checkbox"
+            name="remember"
+            id="remember"
+            title="checkbox"
+            checked={data.remember}
+            onChange={handleChange}
+          />
+          Remember
+        </label>
         <button
-          title="submit"
-          type="submit"
+          title="button"
+          type="button"
           disabled={!data.username || !data.password}
           onClick={handleLogin}
         >
@@ -88,3 +108,92 @@ function Login() {
     </>
   );
 }
+
+// import { useState } from "react";
+
+// // --- Componente Welcome ---
+// // Riceve la prop 'name' e la visualizza
+// function Welcome({ name }: { name: string }) {
+//   return <h1>Benvenuto/a, {name || "Ospite"}!</h1>;
+// }
+
+// // --- Componente Login ---
+// interface LoginProps {
+//   onLogin: (data: { username: string; password: string; remember: boolean }) => void;
+// }
+
+// function Login({ onLogin }: LoginProps) {
+//   const [data, setData] = useState({ username: "", password: "", remember: false });
+
+//   // Gestore universale per gli input
+//   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+//     const { name, value, type, checked } = event.target;
+//     setData((prev) => ({
+//       ...prev,
+//       // Se è una checkbox usiamo 'checked', altrimenti 'value'
+//       [name]: type === "checkbox" ? checked : value,
+//     }));
+//   }
+
+//   function handleLogin() {
+//     onLogin(data);
+//   }
+
+//   function reset() {
+//     setData({ username: "", password: "", remember: false });
+//   }
+
+//   return (
+//     <form style={{ marginTop: "20px", borderTop: "1px solid #ccc", paddingTop: "10px" }}>
+//       <h3>Login</h3>
+//       <label>
+//         Username:
+//         <input name="username" value={data.username} onChange={handleChange} />
+//       </label>
+//       <br />
+//       <label>
+//         Password:
+//         <input name="password" type="password" value={data.password} onChange={handleChange} />
+//       </label>
+//       <br />
+//       <label>
+//         <input type="checkbox" name="remember" checked={data.remember} onChange={handleChange} />
+//         Ricordami
+//       </label>
+//       <br />
+//       {/* Il pulsante è disabilitato se i campi sono vuoti */}
+//       <button type="button" onClick={handleLogin} disabled={!data.username || !data.password}>
+//         Login
+//       </button>
+//       <button type="button" onClick={reset}>
+//         Reset
+//       </button>
+//     </form>
+//   );
+// }
+
+// // --- Componente Principale InteractiveWelcome ---
+// export function InteractiveWelcome() {
+//   const [name, setName] = useState("");
+
+//   // Gestore per l'input del nome
+//   function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+//     setName(event.target.value);
+//   }
+
+//   // Funzione di esempio per gestire il login
+//   const handleLoginSubmit = (loginData: any) => {
+//     console.log("Dati inviati:", loginData);
+//   };
+
+//   return (
+//     <div style={{ padding: "20px" }}>
+//       <label htmlFor="name">Inserisci il tuo Nome: </label>
+//       <input id="name" type="text" value={name} onChange={handleNameChange} />
+
+//       <Welcome name={name} />
+
+//       <Login onLogin={handleLoginSubmit} />
+//     </div>
+//   );
+// }
