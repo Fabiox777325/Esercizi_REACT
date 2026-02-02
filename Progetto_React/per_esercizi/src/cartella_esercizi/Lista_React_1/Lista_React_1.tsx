@@ -7,34 +7,44 @@ import { useEffect } from "react";
 export function Lista_React_1() {
   return (
     <>
-      <Colors items={["kate", "josh", "juan", "pablo"]} />
+      <Colors
+        items={[
+          { id: 1, name: "rosso" },
+          { id: 2, name: "blue" },
+          { id: 3, name: "rosa" },
+          { id: 4, name: "giallo" },
+        ]}
+      />
     </>
   );
 }
 
 interface ColorsProp {
-  items: string[];
+  items: ColorItem[];
+}
+
+interface ColorItem {
+  name: string;
+  id: number;
 }
 
 function Colors({ items }: ColorsProp) {
   useEffect(() => {
     console.log("log da useEffect");
     items.forEach((item, index) => {
-      console.log(`id: ${index} name ${item}`);
+      console.log(`indice: ${index} id: ${item.id} colore: ${item.name}`);
     });
+    console.table(items);
   }, [items]);
-  useEffect(() => {
-    console.log("log completo: " + items.join(" "));
-  }, []);
   return (
     <ul>
-      {items.map((item, index) => {
-        return <Color key={index} color={item} />;
-      })}
+      {items.map((item) => (
+        <Color key={item.id} name={item.name} />
+      ))}
     </ul>
   );
 }
 
-function Color({ color }: { color: string }) {
-  return <li>{color}</li>;
+function Color({ name }: { name: string }) {
+  return <li>{name}</li>;
 }
